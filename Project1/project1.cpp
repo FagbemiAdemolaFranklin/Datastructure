@@ -10,27 +10,37 @@ using namespace std;
 
 int chosen_option;
 
-class Game {
-    
+class Game{
     char game_array[9];
-    int nop, location_on_game_array; // nop means number of plays
-    char player;
+    int nop, location_on_game_array, starter, array_size = (sizeof(game_array)/sizeof(char)) - 1; // nop means number of plays
+    char players_sign, computers_sign, human, computer, inputed_character;
+    unsigned long stats, victories, defeats, ties;
+    string exit_confirmation, difficulty;
+
     public:
-        Game();
+        Game(){
+            
+        };
         Game(char );
         char checkTable();
         void showTable();
         void countTable();
         void countPlays();
-        void playGame(char, int);
-        friend void gameMenu();
-        friend void execute_option(int);
-        friend void execute_option_one();
-        friend void execute_option_two();
+        void playGame();
+        // void playGame(char, int);
+        void gameMenu();
+        void execute_option(int);
+        void execute_option_one(),execute_option_two();
+        void execute_option_three();
+        void treat_errors();
+        void restart_game();
+        void checkAndComputeStats();
+        int saveGame();
+        void exit();
 
 };
 
-void execute_option(int a){ // a is just an argument for the function
+void Game::execute_option(int a){ // a is just an argument for the function
     
     switch (a)
     {
@@ -41,7 +51,7 @@ void execute_option(int a){ // a is just an argument for the function
         execute_option_two();
         break;
     case 3:
-
+        execute_option_three();
         break;
     case 4:
 
@@ -49,7 +59,9 @@ void execute_option(int a){ // a is just an argument for the function
     case 5:
 
         break;
-    
+    case 6:
+        exit();
+        break;
     default:
         cout << "Choose a valid option." <<endl;
         gameMenu();
@@ -57,7 +69,7 @@ void execute_option(int a){ // a is just an argument for the function
     }
 }
 
-void execute_option_one(){
+void Game::execute_option_one(){
     ofstream file_opener;
     file_opener.open("backup.txt");
     if(!file_opener.is_open()){
@@ -65,26 +77,56 @@ void execute_option_one(){
     }else{
         
     }
-    Game game;
-    game.showTable();
-    srand(time(0));
-    game.playGame('X', rand()%10);
+    this->showTable();
+    this->playGame();
 }
 
-void execute_option_two(){
-    Game game2;
+void Game::execute_option_two(){
     cout << "Choose who starts the game" <<endl;
-    cout << "1 - You";
-    cout << "2 - Computer";
-    game2.showTable();
-    cout << "Enter your symbol and a number between 0-9 starting from the top-left corner horizontally."<<endl;
-    cout <<"Specified format : X9"<<endl;
-    cin >> game2.player>>game2.location_on_game_array;
-    game2.playGame(game2.player, game2.location_on_game_array);
+    cout << "1 - You ";
+    cout << " 2 - Computer"<<endl<<flush;
+    cin >> this->starter;
+    cout << starter;
+    cout <<"Sucess";
+    if(this->starter == '2'){
+        this->showTable();
+        computer = 'X';
+        human = 'O';
+        cout<< "Your symbol is O"<<endl<<flush;
+        this->playGame();
+    }else if(starter == '1'){
+        showTable();
+        cout << "Enter your symbol and a number between 0-9 starting from the top-left corner horizontally."<<endl;
+        cout <<"Specified format : X9 or O9"<<endl;
+        cin >> this->inputed_character>>this->location_on_game_array;
+        if(this->inputed_character == 'X' || this->inputed_character == 'O' && this->nop<=9){
+            // this->playGame(this->inputed_character, this->location_on_game_array);
+            human=inputed_character;
+            this->playGame();
+        }else{
+            cout<< "Please check input value";
+        }
+        
+    }
+    
 }
 
-void gameMenu(){ // Lists the options available to the user;
-    cout << "Tic Toe Toe." << endl;
+void Game::execute_option_three(){
+    //You have to input a code here to clear the current game and start a new game.
+    cout << "Select difficulty "<<endl;
+    cout <<left << setw(20) << setfill(' ')<<"Elementary" <<endl;
+    cout <<left << setw(20) << setfill(' ')<<"Basic" <<endl;
+    cout <<left << setw(20) << setfill(' ')<<"Medium" <<endl;
+    cin >> difficulty; 
+    cout << difficulty << " " << "selected" <<endl;
+    this->gameMenu();
+}
+
+// void execute_option_five(){
+
+// }
+void Game::gameMenu(){ // Lists the options available to the user;
+    cout << "Tic Tac Toe." << endl;
     cout << "Menu:" << endl;
     cout <<"Please choose any of the following "<<endl;
     cout << "1- Start or Continue game"<<endl;
@@ -97,25 +139,81 @@ void gameMenu(){ // Lists the options available to the user;
     execute_option(chosen_option);
 }
 
-void Game::playGame(char C, int n) {
-    /*C is the current players chosen alphabet(X or O) 
+void Game::playGame() {
+    /*C is the current players_signs chosen alphabet(X or O) 
     and n is the index on the board intended to play.*/
-    
-    if(C != 'X' || C != 'O'){
-        cout <<"Please input a valid alphabet" <<endl;
-    }else if(n>9){
-        cout <<"Input a number between 1-9" <<endl;
-    }else if(game_array[n] != ' '){
-        cout << "The chosen location is occupied, choose another." << endl;
-    }else{
-        game_array[n] = C ; 
-    }
-    countPlays();
     cout << "0 - Pause or Exit to Menu" << endl;
+    if(this ->computer == ' '){
+        human =='X'?computer='O': computer='X';
+    }
+    srand(time(0));
+    cout << "Your turn" <<endl;
+    cin >> inputed_character;
+    cin >> location_on_game_array;
+    if(inputed_character != 'O' && inputed_character != 0){
+        cout <<"Please input a valid alphabet" <<endl;
+        cout<< "Reminder : Your symbol is O"<<endl <<flush;
+        playGame();
+    }else if(location_on_game_array>9){
+        cout <<"Input a number between 1-9" <<endl<<flush;
+        playGame();
+    }else if(game_array[location_on_game_array] != ' '){
+        cout << "The chosen location is occupied, choose another." << endl<<flush;
+        playGame();
+    }else if(inputed_character == '0'){
+        this->gameMenu();
+    }else{
+        game_array[location_on_game_array] = human;
+        game_array[rand()%10] = computer;
+        nop++;
+    }
+    // countPlays();
+    
 }
-void Game::countPlays() {
-    nop>=6?checkTable():main();
+void Game::checkAndComputeStats(){
+    if((checkTable() == 'X' && computer == 'X') || (checkTable() == 'O' && computer == 'O')){
+        cout << "Computer wins"<<endl;
+        victories++;
+    }else if((checkTable() == 'X' && human == 'X') || (checkTable() == 'O' && human == 'O')){
+        cout << "Human wins"<<endl;
+    }else if(checkTable() == 'N'){
+        cout << "It's a tie.!!"<<endl;
+    }else{
+        playGame();
+    };
 }
+
+// void Game::playGame(char C, int n){
+//     if(this->human == ' ' && this ->computer == ' '){
+//         inputed_character=human;
+//         C=='X'?computer='O':computer='X';
+//     }
+    
+//     if(n>9|| this->human!=inputed_character){
+//         cout << "Please check inputed values"<<endl;
+//     }else if(game_array[location_on_game_array] != ' '){
+//         cout << "The chosen location is occupied, choose another."<<endl;
+//     }else{
+//         game_array[location_on_game_array] = human;
+//         game_array[rand()%10] = computer;
+//         nop++;
+//         if(checkTable() == 'X'){
+//             cout << "Computer wins"<<endl;
+//         }else if(checkTable() == 'O'){
+//             cout << "Human wins"<<endl;
+//         }else if(checkTable() == 'N'){
+//             cout << "It's a draw!!"<<endl;
+//         }else{
+//             cout << "Your Turn"<<endl;
+//             cin >> this->inputed_character>>this->location_on_game_array;
+//             playGame(inputed_character, location_on_game_array);
+//         };
+//     }
+//     // game_array[n] = C;
+// }
+// void Game::countPlays() {
+//     nop>=6?checkTable():main();
+// }
 char Game::checkTable(){ 
     // statements to check the equality in the table in case there is a winner 
     if(game_array[0] == game_array[1] && game_array[1] == game_array[2]){
@@ -134,19 +232,67 @@ char Game::checkTable(){
         return game_array[0];
     }else if(game_array[2] == game_array[4] && game_array[4] == game_array[6]){
         return game_array[2];
-    }else{
+    }else if(nop == 9){
         return 'N'; //N stands for no winner
     }
+    return 't';
 }
 
 void Game::showTable(){
-    int array_size = (sizeof(game_array)/sizeof(char)) - 1;
+    
     for(int i=0; i<=array_size; i++){
-        cout <<left << setw(20) <<setfill(' ') << game_array[i] << endl;
+        cout << setw(20) <<setfill('/') << game_array[i] << endl;
+    }
+
+    // playGame(players_sign, location_on_game_array);
+}
+
+void Game::restart_game(){
+    delete this;
+    // nop=0;
+    // for(int j = 0; j<=array_size; j++){
+    //     game_array[j] = ' ';
+    // }
+}
+
+void Game::exit(){
+    cout << "Is the game over?. Are you sure that you wan to exit ? Yes or No" <<endl;
+    cin >> exit_confirmation;
+    if(exit_confirmation == "Yes") {
+        this->restart_game();
+    }else if(exit_confirmation == "No"){
+        this->playGame();
+    }else{
+        cout << "Please input a valid expression" <<endl;
     }
 }
-int main(){
 
+int Game::saveGame(){
+    char game_array[9],players_sign, computers_sign, human, computer, inputed_character;
+    int nop, location_on_game_array, starter, array_size = (sizeof(game_array)/sizeof(char)) - 1; // nop means number of plays
+    unsigned long stats, victories, defeats, ties;
+    string exit_confirmation, difficulty;
+    ofstream myfile;
+    myfile.open("backup.txt");
+    if(!myfile.is_open()){
+        cout << "Error opening backup file" <<endl;
+        return -1;
+    }
+    myfile.clear();
+    myfile.skipws;
+    struct Backup{
+        char table_backup[9],players_sign_backup, computers_sign_backup, human_backup, computer_backup, inputed_character_backup;
+        int nop_backup, location_backup,array_size_backup;
+        unsigned long stats_backup, victories_backup, defeats_backup, ties_backup;
+        string exit_confirmation_backup, difficulty_backup;
+    };
+    // myfile.write();
+return 0 ;
+
+}
+int main(){
+    Game game1;
+    game1.gameMenu();
     
     return 0;
 }
