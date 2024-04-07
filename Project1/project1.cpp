@@ -14,10 +14,11 @@ int chosen_option;
 char retrieve_decision;
 
 class Game{
+    bool game_state;
     char game_array[9]={'\0','\0','\0','\0','\0','\0','\0','\0','\0'};
     int nop, location_on_game_array, starter, array_size = (sizeof(game_array)/sizeof(char)) - 1; // nop means number of plays
     char players_sign, computers_sign, human, computer, inputed_character;
-    unsigned long stats, victories=0, defeats=0, ties=0;
+    unsigned long stats, victories=0, defeats=0, ties=0, computer_victories, human_victories, computer_defeats, human_defeats, computer_ties, human_ties;
     string exit_confirmation, difficulty,current_user;
     int game_cheat_array_row = 8,game_cheat_array_columns=3;
     int game_cheat_array[8][3] = {
@@ -52,7 +53,11 @@ class Game{
         void restart_game();
         void retrievGame();
         Game startNewGame();
+        int readStatsFile(string);
+        int save_current_stats();
+        void saveCurrentGame();
         int saveStats();
+        void writeStats(string);
         void checkAndComputeStats();
         int saveGame();
         void exit();
@@ -94,8 +99,20 @@ Game Game::startNewGame(){
     players->playGame();
 }
 
-int Game::saveStats(){
-    ifstream stats_file_read("stats.txt");
+void Game::writeStats(string write_stats){
+    ofstream write_stats_file(write_stats, ofstream::out | ofstream::trunc);
+    if(! write_stats_file.is_open()){
+        cout << "Error opening file"<<endl;
+    }else{
+        write_stats_file <<"current_user: " << current_user <<" " << " Difficulty: "<< difficulty<< " "<< "Victories: " << victories<< " "<< "Defeats: "  <<defeats << " " <<ties << " "<< endl;
+        cout<< "Stats saved!"<<endl;
+        write_stats_file.close();
+    }
+
+}
+
+int Game::readStatsFile(string text_param){
+    ifstream stats_file_read(text_param);
     string current_line;
     if(!stats_file_read.is_open()){
         cout <<"Error opening file"<<endl;
@@ -113,9 +130,11 @@ int Game::saveStats(){
                 symbol_find = current_line.find("Ties: ")+6;
                 read_ties = stoi(current_line.substr(symbol_find));
 
-                victories += read_victories;
-                defeats += read_defeats;
-                ties += read_ties;
+                human_victories += read_victories;
+                human_defeats += read_defeats;
+                human_ties += read_ties;
+                writeStats(text_param);
+                return 0;
                 
             }
             
@@ -123,6 +142,51 @@ int Game::saveStats(){
             stats_file_read.close();
         }
     }
+
+    ofstream stats_file_write(text_param);
+    if(!stats_file_write.is_open()){
+        cout << "Error opening file"<<endl;
+        return -1;
+    }else{
+        stats_file_write <<"current_user: " << current_user <<" " << " Difficulty: "<< difficulty<< " "<< "Victories: " << victories<< " "<< "Defeats: "  <<defeats << " " <<ties << " "<< endl;
+        cout<< "Stats saved!"<<endl;
+        stats_file_write.close();
+        return 0;
+    }
+}
+int Game::save_current_stats(){
+    readStatsFile("temporary_stats.txt");
+}
+
+int Game::saveStats(){
+    // ifstream stats_file_read("stats.txt");
+    // string current_line;
+    // if(!stats_file_read.is_open()){
+    //     cout <<"Error opening file"<<endl;
+    //     return - 1;
+    // }
+    // while(getline(stats_file_read,current_line)){
+    //     if(current_line.find(current_user) != string::npos){
+    //         size_t symbol_find = current_line.find("Difficulty: " + difficulty);
+    //         if(symbol_find != string::npos){
+    //             int read_victories, read_defeats, read_ties;
+    //             symbol_find = current_line.find("Victories: ") + 11;
+    //             read_victories = stoi(current_line.substr(symbol_find));
+    //             symbol_find = current_line.find("Defeats: ") +9;
+    //             read_defeats = stoi(current_line.substr(symbol_find));
+    //             symbol_find = current_line.find("Ties: ")+6;
+    //             read_ties = stoi(current_line.substr(symbol_find));
+
+    //             human_victories += read_victories;
+    //             human_defeats += read_defeats;
+    //             human_ties += read_ties;
+                
+    //         }
+            
+    //     }else{
+    //         stats_file_read.close();
+    //     }
+    // }
 
     ofstream stats_file_write("stats.txt");
     if(!stats_file_write.is_open()){
@@ -135,6 +199,11 @@ int Game::saveStats(){
         return 0;
     }
 
+}
+
+void Game::saveCurrentGame(){
+    readStatsFile("temporary.txt");
+    
 }
 
 void Game::execute_option_one(){
@@ -341,14 +410,17 @@ void Game::checkAndComputeStats(){
         cout << "Computer wins"<<endl;
         victories++;
         nop=0;
+        game_state=true;
         exit();
     }else if((checkTable() == 'X' && human == 'X') || (checkTable() == 'O' && human == 'O')){
         cout << "Human wins"<<endl;
         nop=0;
+        game_state=true;
         exit();
     }else if(checkTable() == 'N'){
         cout << "It's a tie.!!"<<endl;
         nop=0;
+        game_state=true;
         exit();
     }
 }
@@ -409,15 +481,21 @@ void Game::restart_game(){
 }
 
 void Game::exit(){
-    cout << "Is the game over?. Are you sure that you wan to exit ? Yes or No" <<endl;
-    cin >> exit_confirmation;
-    if(exit_confirmation == "Yes") {
-        restart_game();
-    }else if(exit_confirmation == "No"){
-        playGame();
+    if(nop==0){
+        ::exit(0);
     }else{
-        cout << "Please input a valid expression" <<endl;
+        cout << "Is the game over?. Are you sure that you want to exit ? Yes or No" <<endl;
+        cin >> exit_confirmation;
+        if(exit_confirmation == "Yes") {
+            saveGame();
+            ::exit(0);
+        }else if(exit_confirmation == "No"){
+            playGame();
+        }else{
+            cout << "Please input a valid expression" <<endl;
+        }   
     }
+    
 }
 
 int Game::saveGame(){
@@ -432,9 +510,9 @@ int Game::saveGame(){
         return -1;
     }else{
         string exit_confirmation, difficulty;
-        myfile << human<< " "<<computer<< " "<<inputed_character << " " << nop << " "<<location_on_game_array << " "<<array_size
+        myfile << current_user << " " << human<< " "<<computer<< " "<<inputed_character << " " << nop << " "<<location_on_game_array << " "<<array_size
         << " "<< stats<< " "<<victories<< " "<<defeats<< " "<<ties
-        << " "<< exit_confirmation<< " "<<difficulty;
+        << " "<<difficulty;
         myfile.close();
         return 0;
     }
