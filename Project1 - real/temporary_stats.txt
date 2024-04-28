@@ -1,0 +1,27 @@
+current_user: ade  Difficulty: Elementary Victories: 4 Defeats: 10 Ties: 25
+current_user: computer&acurrent_user: ade  Difficulty: Elementary Victories: 4 Defeats: 10 Ties: 25
+: 25
+r&ade  Difficulty: Basic Victories: 80 Defeats: 30 Ties: 4
+current_user: computer&ade  Difficulty: Medium Victories: 7 Defeats: 15 Ties: 1
+current_user: dee  Difficulty: Elementary Victories: 7 Defeats: 0 Ties: 0
+current_user: sed  Difficulty: Elementary Victories: 1 Defeats: 0 Ties: 0
+current_user: red  Difficulty: Elementary Victories: 5 Defeats: 0 Ties: 0
+current_user: fre  Difficulty: Elementary Victories: 6 Defeats: 0 Ties: 0
+current_user: fer  Difficulty: Elementary Victories: 1 Defeats: 0 Ties: 0
+current_user: gat  Difficulty: Elementary Victories: 5 Defeats: 0 Ties: 0
+current_user: duh  Difficulty: Elementary Victories: 8 Defeats: 0 Ties: 0
+current_user: duj  Difficulty: Elementary Victories: 7 Defeats: 0 Ties: 0
+current_user: din  Difficulty: Elementary Victories: 10 Defeats: 0 Ties: 0
+current_user: dok  Difficulty: Elementary Victories: 2 Defeats: 0 Ties: 0
+current_user: dol  Difficulty: Elementary Victories: 8 Defeats: 0 Ties: 0
+current_user: dit  Difficulty: Elementary Victories: 7  Defeats: 0 Ties: 0
+current_user: fin  Difficulty: Elementary Victories: 5 Defeats: 0 Ties: 0
+current_user: mip  Difficulty: Elementary Victories: 7 Defeats: 0 Ties: 0
+current_user: tip  Difficulty: Elementary Victories: 9 Defeats: 0 Ties: 0
+current_user: tar  Difficulty: Elementary Victories: 3 Defeats: 0 Ties: 0
+current_user: zed  Difficulty: Elementary Victories: 2 Defeats: 0 Ties: 0
+current_user: veg  Difficulty: Elementary Victories: 9 Defeats: 0 Ties: 0
+current_user: dom  Difficulty: Elementary Victories: 7 Defeats: 0 Ties: 0
+current_user: ner  Difficulty: Elementary Victories: 5 Defeats: 0 Ties: 0
+current_user: men  Difficulty: Elementary Victories: 1 Defeats: 0 Ties: 0
+current_user: mer  Difficulty: Elementary Victories: 1 Defeats: 0 Ties: 0
