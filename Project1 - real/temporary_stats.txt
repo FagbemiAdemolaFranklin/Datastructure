@@ -1,0 +1,10 @@
+User: computer&Frank Difficulty: Elementary Victories: 4 Defeats: 0 Ties: 0 
+User: Frank Difficulty: Elementary Victories: 0 Defeats: 4 Ties: 0 
+User: computer&Ademola Difficulty: Elementary Victories: 2 Defeats: 1 Ties: 0 
+User: Ademola Difficulty: Elementary Victories: 1 Defeats: 2 Ties: 0 
+User: computer&Bruno Difficulty: Elementary Victories: 0 Defeats: 0 Ties: 0 
+User: Bruno Difficulty: Elementary Victories: 0 Defeats: 0 Ties: 0 
+User: computer&Ade Difficulty: Elementary Victories: 0 Defeats: 1 Ties: 0 
+User: Ade Difficulty: Elementary Victories: 1 Defeats: 0 Ties: 0 
+User: computer&Frank Difficulty: Basic Victories: 0 Defeats: 0 Ties: 0 
+User: Frank Difficulty: Basic Victories: 0 Defeats: 2 Ties: 0 
