@@ -1,0 +1,2 @@
+User: computer&Frank Difficulty: Elementary Victories: 4 Defeats: 4 Ties: 0 
+User: Frank Difficulty: Elementary Victories: 3 Defeats: 1 Ties: 0  
