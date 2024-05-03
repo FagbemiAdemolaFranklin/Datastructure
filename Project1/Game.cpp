@@ -8,9 +8,10 @@
 #include <cstring>
 #include <cstdlib>
 #include <algorithm>
+#include "Game.h"
+
 
 using namespace std;
-
 
 int chosen_option;
 char retrieve_decision;
@@ -23,53 +24,6 @@ struct PlayerStats {
     int ties;
 };
 PlayerStats players[50];
-
-class Game{
-    bool game_state;
-    char game_array[9]={'\0','\0','\0','\0','\0','\0','\0','\0','\0'};
-    int nop=0, location_on_game_array, starter, array_size = (sizeof(game_array)/sizeof(char)) - 1; // nop means number of plays
-    char human='O', computer='X', inputed_character='\0';
-    unsigned long stats, victories=0, defeats=0, ties=0, computer_victories=0, human_victories=0, computer_defeats=0, human_defeats=0, computer_ties=0, human_ties=0;
-    string exit_confirmation, difficulty="Elementary",User;
-
-    public:
-        Game(){
-            
-        };
-        Game(char );
-        char checkTable();
-        void showTable();
-        void countTable();
-        void countPlays();
-        void playGame();
-        void gameMenu();
-        void clearArray();
-        int checkRandomNumber();
-        void playElementary();
-        void playGreedy();
-        void playGreedyWinner();
-        void playMedium();
-        void playMediumWinner();
-        void execute_option(int);
-        void execute_option_one(),execute_option_two();
-        void execute_option_three(),execute_option_four();
-        void execute_option_five(struct PlayerStats playerss[], int);
-        void restart_game();
-        Game startNewGame();
-        int retrievePreviousGame(string user);
-        int readAndWriteStats(string, string, string);
-        int loadStats(string, string, string);
-        void showStats();
-        void resetStats();
-        void writeStats(string);
-        void checkAndComputeStats();
-        int saveGame();
-        int showTopPlayers(string, string);
-        void exit();
-        
-
-};
-
 
 void Game::execute_option(int a){ // a is just an argument for the function
     switch (a)
@@ -200,6 +154,7 @@ int Game::loadStats(string text2_param, string user2, string diff2){
             }
             
         }
+
         
     }
 
@@ -327,6 +282,60 @@ int Game::readAndWriteStats(string text_param, string user, string diff) {
 }
 
 
+
+// int Game::save_current_stats(){
+//     readAndWriteStats("temporary_stats.txt", User, difficulty);
+// }
+
+// int Game::saveStats(){
+    // ifstream stats_file_read("stats.txt");
+    // string current_line;
+    // if(!stats_file_read.is_open()){
+    //     cout <<"Error opening file"<<endl;
+    //     return - 1;
+    // }
+    // while(getline(stats_file_read,current_line)){
+    //     if(current_line.find(User) != string::npos){
+    //         size_t symbol_find = current_line.find("Difficulty: " + difficulty);
+    //         if(symbol_find != string::npos){
+    //             int read_victories, read_defeats, read_ties;
+    //             symbol_find = current_line.find("Victories: ") + 11;
+    //             read_victories = stoi(current_line.substr(symbol_find));
+    //             symbol_find = current_line.find("Defeats: ") +9;
+    //             read_defeats = stoi(current_line.substr(symbol_find));
+    //             symbol_find = current_line.find("Ties: ")+6;
+    //             read_ties = stoi(current_line.substr(symbol_find));
+
+    //             human_victories += read_victories;
+    //             human_defeats += read_defeats;
+    //             human_ties += read_ties;
+                
+    //         }
+            
+    //     }else{
+    //         stats_file_read.close();
+    //     }
+    // }
+
+//     ofstream stats_file_write("stats.txt");
+//     if(!stats_file_write.is_open()){
+//         cout << "Error opening file"<<endl;
+//         return -1;
+//     }else{
+//         stats_file_write <<"User: " << User <<" " << " Difficulty: "<< difficulty<< " "<< "Victories: " << victories<< " "<< "Defeats: "  <<defeats << " " <<ties << " "<< endl;
+//         cout<< "Stats saved!"<<endl;
+//         stats_file_write.close();
+//         return 0;
+//     }
+
+// }
+
+// void Game::saveCurrentGame(){
+//     readAndWriteStats("temporary.txt");
+    
+// }
+
+
 int Game::retrievePreviousGame(string user) {
     cout << "Retrieving..." << endl;
     ifstream retriever("previous_game.txt");
@@ -401,6 +410,75 @@ int Game::retrievePreviousGame(string user) {
     }
 }
 
+// int Game::retrievePreviousGame(string user){
+//     cout<<"Retrieving..."<<endl;
+//     ifstream retriever("previous_game.txt");
+//     string current_line;
+//     size_t symbol_find;
+//     if(!retriever.is_open()){
+//         cout <<  "Error opening file" << endl;
+//         return -1;
+//     }else{
+//         while(getline(retriever,current_line)){
+//             cout<<"Found"<<endl;
+//             string line_object = "", line_object_2 = "";
+//             // Check if the line contains "User:" and "Difficulty:" substrings
+//             size_t user_pos = current_line.find("User: ");
+//             size_t human_pos = current_line.find("human: ");
+//             size_t arrays_pos = current_line.find("arrays: ");
+
+//             if (user_pos != string::npos && human_pos != string::npos) {
+//                 // Extract user and difficulty substrings
+//                 line_object = current_line.substr(user_pos + 6, human_pos - user_pos - 7);
+            
+//                 cout<<line_object<<endl;
+//                 // line_object_2 = current_line.substr(human_pos + 12, vict_pos-human_pos-13);
+//             }
+
+//             if((line_object==User)){
+//                 cout << "Do you want to retrieve previous game? Y or N "<<endl;
+//                 cin >> retrieve_decision;
+//                 if(retrieve_decision == 'Y'){
+//                     User=user;
+//                     symbol_find = current_line.find("human: ");
+//                     human=current_line.at(symbol_find+8);
+//                     cout<<human<<endl;
+//                     symbol_find = current_line.find("nop: ");
+//                     nop=stoi(current_line.substr(symbol_find+5));
+//                     cout<<nop<<endl;
+//                     symbol_find = current_line.find("location_on_game_array: ");
+//                     location_on_game_array=stoi(current_line.substr(symbol_find+24));
+//                     cout<<location_on_game_array<<endl;
+//                     symbol_find = current_line.find("array_size: ");
+//                     array_size=stoi(current_line.substr(symbol_find+12));
+//                     cout<<array_size<<endl;
+//                     symbol_find = current_line.find("difficulty: ");
+//                     cout<<symbol_find<<endl;
+//                     difficulty=current_line.substr(symbol_find+12, arrays_pos-symbol_find-13);
+//                     cout<<difficulty<<endl;
+//                     symbol_find = current_line.find("arrays: ");
+//                     cout<<current_line.substr(symbol_find)<<endl;
+//                     for (int i = 0; i < 9; i++) {
+//                         game_array[i] = current_line.substr(symbol_find+8)[i];
+//                         cout<<game_array[i]<<endl;
+//                     }
+                    
+//                     cout<<"Finished"<<endl; 
+//                 }else if(retrieve_decision == 'N'){
+//                     current_line.erase();
+                    
+//                 }else{
+//                     cout << "Please input a valid option"<<endl;
+//                     execute_option_one();
+//                 }
+                
+//             }
+//         }
+//         retriever.close();
+//         return 0;
+//     }
+
+// }
 
 void Game::execute_option_one(){
     if(User==""){
@@ -536,6 +614,18 @@ void Game::playElementary(){
     
 }
 
+// void Game::playGreedyWinner(){
+//     for(int i = 0; i<=8; i++){
+//         if(game_array[i] == '\0'){
+//             game_array[i] = computer;
+//             if(checkTable() == computer) return;
+//             game_array[i]='\0';
+//             game_array[checkRandomNumber()] = computer;
+//             break;
+//         }
+//     }
+// }
+
 void Game::playGreedyWinner() {
     // Check if there is an empty cell to play
     for (int i = 0; i <= 8; i++) {
@@ -553,6 +643,8 @@ void Game::playGreedyWinner() {
 }
 
 void Game::playGreedy(){
+    // loadStats("temporary_stats.txt", "computer", difficulty);
+    // loadStats("temporary_stats.txt", User, difficulty);
     showStats();
     cout << "0 - Pause or Exit to Menu"<<endl;
     showTable();
@@ -711,6 +803,12 @@ void Game::checkAndComputeStats(){
     }
 }
 
+void Game::playGame(int n){
+    location_on_game_array=n;
+}
+// void Game::countPlays() {
+//     nop>=6?checkTable():main();
+// }
 char Game::checkTable(){ 
     // statements to check the equality in the table in case there is a winner 
     if(game_array[0] == game_array[1] && game_array[1] == game_array[2]){
@@ -835,10 +933,4 @@ int Game::saveGame(){
         cout << "Operation completed" << endl;
         return 0;
     }   
-}
-
-int main(){
-    Game game1;
-    game1.gameMenu();
-    return 0;
 }
